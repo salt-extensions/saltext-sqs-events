@@ -4,6 +4,8 @@ An engine that continuously reads messages from SQS and fires them as events.
 
 Note that long polling is utilized to avoid excessive CPU usage.
 
+.. versionsadded:: Beryllium
+
 :configuration:
     This engine can be run on the master or on a minion.
 
@@ -42,8 +44,12 @@ Note that long polling is utilized to avoid excessive CPU usage.
 :depends: boto
 '''
 # Import python libs
+from __future__ import absolute_import
 import logging
 import time
+
+# Import salt libs
+import salt.utils.event
 
 # Import salt libs
 import salt.utils.event
