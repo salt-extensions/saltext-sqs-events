@@ -57,9 +57,6 @@ import json
 # Import salt libs
 import salt.utils.event
 
-# Import salt libs
-import salt.utils.event
-
 # Import third party libs
 try:
     import boto.sqs
@@ -142,7 +139,7 @@ def start(queue, profile=None, tag='salt/engine/sqs'):
                 continue
         msgs = q.get_messages(wait_time_seconds=20)
         for msg in msgs:
-            if sqs.message_format == "json":
+            if message_format == "json":
                 fire(tag, {'message': json.loads(msg.get_body())})
             else:
                 fire(tag, {'message': msg.get_body()})
