@@ -69,7 +69,7 @@ from salt.ext.six import string_types
 
 def __virtual__():
     if not HAS_BOTO:
-        return False
+        return (False, 'Cannot import engine sqs_events because the required boto module is missing')
     else:
         return True
 
