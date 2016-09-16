@@ -123,9 +123,21 @@ def _get_sqs_conn(profile, region=None, key=None, keyid=None):
     return conn
 
 
+def _process_queue(q, q_name, fire_master, tag='salt/engine/sqs', owner_acct_id=None):
+    if not q:
+        log.warning('failure connecting to queue: {0}, '
+                    'waiting 10 seconds.'.format(':'.join(filter(None, (str(owner_acct_id), q_name)))))
+        time.sleep(10)
+    else:
+        msgs = q.get_messages(wait_time_seconds=20)
+        for msg in msgs:
+            fire_master(tag=tag, data={'message': msg.get_body()})
+            msg.delete()
+
+
 def start(queue, profile=None, tag='salt/engine/sqs', owner_acct_id=None):
     '''
-    Listen to events and write them to a log file
+    Listen to sqs and fire message on event bus
     '''
     if __opts__.get('__role') == 'master':
         fire_master = salt.utils.event.get_master_event(
@@ -133,15 +145,7 @@ def start(queue, profile=None, tag='salt/engine/sqs', owner_acct_id=None):
             __opts__['sock_dir'],
             listen=False).fire_event
     else:
-        fire_master = None
-
-    message_format = __opts__.get('sqs.message_format', None)
-
-    def fire(tag, msg):
-        if fire_master:
-            fire_master(msg, tag)
-        else:
-            __salt__['event.send'](tag, msg)
+        fire_master = __salt__['event.send']
 
     sqs = _get_sqs_conn(profile)
     q = None
@@ -160,3 +164,4 @@ def start(queue, profile=None, tag='salt/engine/sqs', owner_acct_id=None):
             else:
                 fire(tag, {'message': msg.get_body()})
             msg.delete()
+        _process_queue(q, queue, fire_master, tag, owner_acct_id)
