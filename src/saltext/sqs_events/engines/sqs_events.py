@@ -157,16 +157,6 @@ def start(queue, profile=None, tag='salt/engine/sqs', owner_acct_id=None):
     while True:
         if not q:
             q = sqs.get_queue(queue, owner_acct_id=owner_acct_id)
-            if not q:
-                log.warning('failure connecting to queue: {0}, '
-                            'waiting 10 seconds.'.format(':'.join(filter(None, (str(owner_acct_id), queue)))))
-                time.sleep(10)
-                continue
-        msgs = q.get_messages(wait_time_seconds=20)
-        for msg in msgs:
-            if message_format == "json":
-                fire(tag, {'message': json.loads(msg.get_body())})
-            else:
-                fire(tag, {'message': msg.get_body()})
-            msg.delete()
-        _process_queue(q, queue, fire_master, tag, owner_acct_id)
+            q.set_message_class(boto.sqs.message.RawMessage)
+
+        _process_queue(q, queue, fire_master, tag=tag, owner_acct_id=owner_acct_id, message_format=message_format)
