@@ -14,7 +14,7 @@ write_to_template = "__version__ = \"{version}\""
 name = "saltext.sqs-events"
 description = "Salt Extension for interacting with Sqs Events"
 authors = [
-    {name = "Jörg Schüppel", email = "schorsus@gmx.de"},
+    {name = "Jörg Schüppel", email = "joerg.schueppel@invia.de"},
 ]
 keywords = [
     "salt-extension",
