@@ -3,7 +3,7 @@
 _commit: 0.7.5
 _src_path: https://github.com/salt-extensions/salt-extension-copier
 author: "J\xF6rg Sch\xFCppel"
-author_email: schorsus@gmx.de
+author_email: joerg.schueppel@invia.de
 coc_contact: ''
 copyright_begin: 2025
 deploy_docs: rolling
