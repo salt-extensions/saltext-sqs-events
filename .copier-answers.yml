@@ -27,3 +27,5 @@ summary: Salt Extension for interacting with Sqs Events
 test_containers: false
 tracker_url: https://github.com/salt-extensions/saltext-sqs-events/issues
 url: https://github.com/salt-extensions/saltext-sqs-events
+
+#copier updated
