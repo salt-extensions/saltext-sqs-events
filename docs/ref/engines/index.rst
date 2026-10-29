@@ -1,4 +1,4 @@
-.. all-saltext.sqs-events.engines:
+.. all-saltext.sqs_events.engines:
 
 ______________
 Engine Modules
